@@ -25,7 +25,8 @@ def handle_delete_command(bot, message):
         # Cache the data
         delete_states[message.chat.id] = {
             'data': data,
-            'awaiting_confirmation': False
+            'awaiting_confirmation': False,
+            'timestamp': time.time()  # Add timestamp for cleanup
         }
 
         response = (
