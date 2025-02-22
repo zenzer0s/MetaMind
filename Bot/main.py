@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.metadata import extract_metadata
-from handlers.list_handler import handle_list_command  # Import after fixing sys.path
+from handlers.list_handler import handle_list_command, handle_number_selection  # Import after fixing sys.path
 
 # Load environment variables
 load_dotenv()
@@ -56,6 +56,10 @@ def handle_link(message):
 @bot.message_handler(commands=['list'])
 def list_command(message):
     handle_list_command(bot, message)
+
+@bot.message_handler(func=lambda message: message.text and message.text.isdigit())
+def number_selection(message):
+    handle_number_selection(message)
 
 # Start polling
 if __name__ == "__main__":
