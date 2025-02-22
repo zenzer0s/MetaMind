@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.metadata import extract_metadata
-  # Import after fixing sys.path
+from handlers.list_handler import handle_list_command  # Import after fixing sys.path
 
 # Load environment variables
 load_dotenv()
@@ -51,6 +51,11 @@ def handle_link(message):
     except Exception as e:
         logger.error(f"Error processing link: {e}")
         bot.send_message(message.chat.id, "⚠️ Something went wrong! Please try again.")
+
+# Add this after your other handlers
+@bot.message_handler(commands=['list'])
+def list_command(message):
+    handle_list_command(bot, message)
 
 # Start polling
 if __name__ == "__main__":
