@@ -77,6 +77,19 @@ def delete_selection(message):
 def number_selection(message):
     handle_number_selection(message)
 
+@bot.message_handler(commands=['help', 'start'])
+def help_command(message: Message) -> None:
+    """Display bot usage information."""
+    help_text = (
+        "*📚 MetaMind Bot Commands:*\n\n"
+        "• Send any URL to extract metadata\n"
+        "• /list - Show all stored links\n"
+        "• /delete - Delete specific or all links\n"
+        "• /help - Show this message\n\n"
+        "_Reply with numbers when prompted to select items._"
+    )
+    bot.send_message(message.chat.id, help_text, parse_mode="Markdown")
+
 # Start polling
 if __name__ == "__main__":
     logger.info("MetaMind Bot is running...")
