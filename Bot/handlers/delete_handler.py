@@ -26,7 +26,7 @@ def handle_delete_command(bot, message):
         delete_states[message.chat.id] = {
             'data': data,
             'awaiting_confirmation': False,
-            'timestamp': time.time()  # Add timestamp for cleanup
+            'timestamp': time.time()  # Add timestamp
         }
 
         response = (
@@ -150,13 +150,20 @@ def handle_delete_selection(bot, message):
 
 def cleanup_delete_states() -> None:
     """Remove old delete states after timeout."""
-    current_time = time.time()
-    timeout = 300  # 5 minutes
-    
-    to_remove = [
-        chat_id for chat_id, state in delete_states.items()
-        if current_time - state.get('timestamp', 0) > timeout
-    ]
-    
-    for chat_id in to_remove:
-        delete_states.pop(chat_id, None)
+    try:
+        current_time = time.time()
+        timeout = 300  # 5 minutes timeout
+
+        # Find expired states
+        expired_chats = [
+            chat_id for chat_id, state in delete_states.items()
+            if current_time - state.get('timestamp', 0) > timeout
+        ]
+
+        # Remove expired states
+        for chat_id in expired_chats:
+            delete_states.pop(chat_id, None)
+            logger.info(f"[DELETE] Cleaned up expired state for chat_id: {chat_id}")
+
+    except Exception as e:
+        logger.error(f"[DELETE] Error in cleanup: {str(e)}")

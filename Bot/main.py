@@ -22,7 +22,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.metadata import extract_metadata
 from handlers.list_handler import handle_list_command, handle_number_selection
-from handlers.delete_handler import handle_delete_command, handle_delete_selection, delete_states  # Added delete_states
+from handlers.delete_handler import (
+    handle_delete_command, 
+    handle_delete_selection, 
+    delete_states,
+    cleanup_delete_states  # Add this import
+)
 
 # Load environment variables
 load_dotenv()
