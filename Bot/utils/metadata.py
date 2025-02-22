@@ -4,6 +4,8 @@ import os
 from bs4 import BeautifulSoup
 import json
 from datetime import datetime
+from urllib.parse import urlparse
+import re
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
@@ -46,3 +48,18 @@ def store_metadata(url, metadata):
     
     with open(db_path, 'w') as f:
         json.dump(data, f, indent=4)
+
+def is_valid_url(url: str) -> bool:
+    """Validate URL format."""
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except Exception:
+        return False
+
+def sanitize_url(url: str) -> str:
+    """Clean and validate URL."""
+    url = url.strip()
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+    return url if is_valid_url(url) else ''
