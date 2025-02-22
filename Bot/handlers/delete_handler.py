@@ -56,7 +56,10 @@ def handle_delete_selection(bot, message):
     """Handle delete selection including multiple numbers."""
     try:
         chat_id = message.chat.id
+        logger.debug(f"Processing delete selection. Input: {message.text}")
+        
         if chat_id not in delete_states:
+            logger.warning(f"Chat {chat_id} tried to delete without /delete command")
             bot.reply_to(message, "❌ Please use /delete command first.")
             return
 
@@ -84,13 +87,16 @@ def handle_delete_selection(bot, message):
         try:
             # Parse numbers from input (e.g., "1,3,4" or "1 3 4")
             numbers = [int(n.strip()) for n in re.split(r'[,\s]+', message.text)]
+            logger.info(f"Parsed numbers: {numbers}")
             
             if not numbers:
+                logger.warning("No valid numbers found in input")
                 bot.reply_to(message, "❌ Please enter valid numbers.")
                 return
 
             # Validate numbers
             if any(n < 1 or n > len(state['data']) for n in numbers):
+                logger.warning(f"Invalid numbers detected: {numbers}")
                 bot.reply_to(message, "❌ Invalid number(s). Please choose from the list.")
                 return
 
