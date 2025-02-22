@@ -2,9 +2,14 @@ import logging
 import telebot
 import sys
 import os
+import time  # Added import
 from dotenv import load_dotenv
 from typing import Optional, Dict, Any
 from telebot.types import Message
+from telebot.handler_backends import State, StatesGroup
+from telebot.storage import StateMemoryStorage
+from telebot import asyncio_filters
+from collections import defaultdict
 
 # Add the project root to Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -23,8 +28,24 @@ TOKEN = os.getenv("BOT_TOKEN")
 if not TOKEN:
     raise ValueError("BOT_TOKEN is missing! Check your .env file.")
 
-# Initialize bot
-bot = telebot.TeleBot(TOKEN)
+# Rate limiting
+RATE_LIMIT = 2  # seconds between messages
+last_message_time: Dict[int, float] = defaultdict(float)
+
+def rate_limit_check(message: Message) -> bool:
+    """Check if user is sending messages too quickly."""
+    user_id = message.from_user.id
+    current_time = time.time()
+    
+    if current_time - last_message_time[user_id] < RATE_LIMIT:
+        return False
+    
+    last_message_time[user_id] = current_time
+    return True
+
+# Initialize bot with state storage
+state_storage = StateMemoryStorage()
+bot = telebot.TeleBot(TOKEN, state_storage=state_storage)
 
 # Enable logging
 logging.basicConfig(
@@ -93,4 +114,9 @@ def help_command(message: Message) -> None:
 # Start polling
 if __name__ == "__main__":
     logger.info("MetaMind Bot is running...")
-    bot.polling(none_stop=True)
+    while True:
+        try:
+            bot.polling(none_stop=True, timeout=60)
+        except Exception as e:
+            logger.error(f"Bot polling error: {e}")
+            time.sleep(15)  # Wait before retrying
