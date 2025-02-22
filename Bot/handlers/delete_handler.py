@@ -29,18 +29,7 @@ def handle_delete_command(bot, message):
             'timestamp': time.time()
         }
 
-        response = (
-            "*🗑️ Delete Links:*\n\n"
-            "_Send numbers to delete specific links:_\n"
-            "• Single number (e.g., `2`)\n"
-            "• Multiple numbers (e.g., `1,3,4` or `1 2 3`)\n\n"
-            "*Stored Links:*\n\n"
-        )
-
-        # Add numbered links
-        for index, (url, info) in enumerate(data.items(), 1):
-            title = info['metadata']['title'][:47] + "..." if len(info['metadata']['title']) > 50 else info['metadata']['title']
-            response += f"{index}. [{title}]({url})\n\n"
+        response = format_delete_message(data)
 
         bot.send_message(
             message.chat.id,
@@ -167,3 +156,21 @@ def cleanup_delete_states() -> None:
 
     except Exception as e:
         logger.error(f"[DELETE] Error in cleanup: {str(e)}")
+
+def format_delete_message(data: dict) -> str:
+    """Format delete selection message with better UI."""
+    response = (
+        "*🗑️ Delete Links*\n\n"
+        "*Instructions:*\n"
+        "• Send a number to delete single link\n"
+        "• Send multiple numbers for batch delete:\n"
+        "  └ Example: `1,2,3` or `1 2 3`\n\n"
+        "*Available Links:*\n\n"
+    )
+    
+    for index, (url, info) in enumerate(data.items(), 1):
+        title = info['metadata'].get('title', 'No title')
+        title = f"{title[:50]}..." if len(title) > 50 else title
+        response += f"*{index}.* [{title}]({url})\n\n"
+    
+    return response
