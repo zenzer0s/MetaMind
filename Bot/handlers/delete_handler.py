@@ -77,6 +77,19 @@ def handle_delete_selection(bot, message):
                 logger.warning(f"[DELETE] Invalid number: {part}")
                 continue
 
+        # Add confirmation for multiple deletions
+        if len(numbers) > 1:
+            state['pending_numbers'] = numbers
+            state['awaiting_confirmation'] = True
+            titles = [state['data'][list(state['data'].keys())[n-1]]['metadata']['title'] for n in numbers]
+            confirm_text = "*❓ Confirm deletion of:*\n\n"
+            for i, title in enumerate(titles, 1):
+                confirm_text += f"{i}. *{title}*\n"
+            confirm_text += "\n_Reply 'yes' to confirm_"
+            
+            bot.reply_to(message, confirm_text, parse_mode="Markdown")
+            return
+
         # Process each number
         deleted_items = []
         state = delete_states[chat_id]
