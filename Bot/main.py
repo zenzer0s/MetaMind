@@ -126,15 +126,18 @@ def number_selection(message):
 def help_command(message: Message) -> None:
     """Display bot usage information."""
     help_text = (
-        "*📚 MetaMind Bot Commands:*\n\n"
-        "• Send any URL to extract metadata\n"
-        "• /list - Show all stored links\n"
-        "• /del (or /delete) - Delete specific links\n"
-        "• /help - Show this message\n\n"
-        "_Reply with numbers when prompted to select items._\n"
-        "_You can delete multiple links using:_\n"
-        "• Comma-separated: `1,2,3`\n"
-        "• Space-separated: `1 2 3`"
+        "*🤖 Welcome to MetaMind Bot!*\n\n"
+        "*Available Commands:*\n"
+        "📎 Send any URL to extract metadata\n"
+        "📋 /list - Browse your saved links\n"
+        "🗑️ /del - Delete links\n"
+        "❓ /help - Show this message\n\n"
+        "*Quick Tips:*\n"
+        "• Reply with numbers to select items\n"
+        "• Delete multiple links using:\n"
+        "  └ Comma format: `1,2,3`\n"
+        "  └ Space format: `1 2 3`\n\n"
+        "_Made with ❤️ by MetaMind_"
     )
     bot.send_message(message.chat.id, help_text, parse_mode="Markdown")
 
