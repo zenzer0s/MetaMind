@@ -129,10 +129,12 @@ def help_command(message: Message) -> None:
         "*📚 MetaMind Bot Commands:*\n\n"
         "• Send any URL to extract metadata\n"
         "• /list - Show all stored links\n"
-        "• /del (or /delete) - Delete specific or all links\n"
+        "• /del (or /delete) - Delete specific links\n"
         "• /help - Show this message\n\n"
         "_Reply with numbers when prompted to select items._\n"
-        "_You can use comma or space to delete multiple links (e.g., `1,2,3` or `1 2 3`)_"
+        "_You can delete multiple links using:_\n"
+        "• Comma-separated: `1,2,3`\n"
+        "• Space-separated: `1 2 3`"
     )
     bot.send_message(message.chat.id, help_text, parse_mode="Markdown")
 

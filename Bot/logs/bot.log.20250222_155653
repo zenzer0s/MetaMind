@@ -1,0 +1,13 @@
+Log file rotated at 2025-02-22T15:51:53.026257
+2025-02-22 15:51:53,026 - utils.log_cleanup - INFO - Log file rotated. Backup: Bot/logs/bot.log.20250222_155153
+2025-02-22 15:52:58,396 - __main__ - INFO - Received link: https://m.youtube.com/
+2025-02-22 15:53:02,740 - __main__ - INFO - Received link: https://github.com/zenzer0s/MetaMind
+2025-02-22 15:53:07,250 - __main__ - INFO - Received link: https://m.cricbuzz.com/
+2025-02-22 15:53:18,093 - __main__ - INFO - [MAIN] Received message: 'all'
+2025-02-22 15:53:18,094 - handlers.delete_handler - INFO - [DELETE] New input received: 'all' from chat_id: 2123961513
+2025-02-22 15:53:18,095 - handlers.delete_handler - WARNING - [DELETE] Invalid number: all
+2025-02-22 15:53:18,095 - handlers.delete_handler - WARNING - [DELETE] No valid numbers found
+2025-02-22 15:53:29,104 - __main__ - INFO - [MAIN] Received message: 'All'
+2025-02-22 15:53:29,105 - handlers.delete_handler - INFO - [DELETE] New input received: 'all' from chat_id: 2123961513
+2025-02-22 15:53:29,105 - handlers.delete_handler - WARNING - [DELETE] Invalid number: all
+2025-02-22 15:53:29,106 - handlers.delete_handler - WARNING - [DELETE] No valid numbers found
