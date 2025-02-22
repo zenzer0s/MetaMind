@@ -53,97 +53,63 @@ def handle_delete_command(bot, message):
         bot.reply_to(message, "⚠️ An error occurred while retrieving links.")
 
 def handle_delete_selection(bot, message):
-    """Handle delete selection including multiple numbers."""
     try:
         chat_id = message.chat.id
-        logger.info(f"Processing delete selection. Input: {message.text}")
-        
+        user_input = message.text.strip()
+        logger.info(f"[DELETE] New input received: '{user_input}' from chat_id: {chat_id}")
+
         if chat_id not in delete_states:
-            logger.warning(f"Chat {chat_id} tried to delete without /delete command")
-            bot.reply_to(message, "❌ Please use /delete command first.")
+            logger.warning(f"[DELETE] State not found for chat_id: {chat_id}")
+            bot.reply_to(message, "❌ Please use /del or /delete command first.")
             return
 
-        state = delete_states[chat_id]
+        # Handle numbers with both commas and spaces
+        numbers = []
+        # Split by both comma and space
+        parts = [part.strip() for part in re.split(r'[,\s]+', user_input) if part.strip()]
         
-        # Handle "all" deletion confirmation
-        if state.get('awaiting_confirmation'):
-            if message.text.lower() == 'yes':
-                db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database.json')
-                with open(db_path, 'w') as f:
-                    json.dump({}, f, indent=4)
-                bot.reply_to(message, "✅ All links have been deleted.")
-            else:
-                bot.reply_to(message, "❌ Deletion cancelled.")
-            delete_states.pop(chat_id)
-            return
+        for part in parts:
+            try:
+                num = int(part)
+                numbers.append(num)
+                logger.info(f"[DELETE] Parsed number: {num}")
+            except ValueError:
+                logger.warning(f"[DELETE] Invalid number: {part}")
+                continue
 
-        # Handle "all" request
-        if message.text.lower() == 'all':
-            state['awaiting_confirmation'] = True
-            bot.reply_to(message, "⚠️ Are you sure you want to delete ALL links? Reply 'yes' to confirm.")
-            return
-
-        # Handle multiple number deletion
-        try:
-            # Clean and split input
-            clean_input = message.text.replace(' ', ',')
-            numbers = []
-            
-            for num in clean_input.split(','):
-                try:
-                    n = int(num.strip())
-                    numbers.append(n)
-                except ValueError:
-                    logger.warning(f"Invalid number in input: {num}")
-                    continue
-            
-            logger.info(f"Parsed numbers: {numbers}")
-            
-            if not numbers:
-                logger.warning("No valid numbers found")
-                bot.reply_to(message, "❌ Please enter valid numbers (e.g., 1,2,3 or 1 2 3)")
-                return
-
-            # Validate numbers
-            valid_numbers = []
-            for n in numbers:
-                if 1 <= n <= len(state['data']):
-                    valid_numbers.append(n)
-                else:
-                    logger.warning(f"Number out of range: {n}")
-
-            if not valid_numbers:
-                bot.reply_to(message, "❌ No valid numbers provided. Please choose from the list.")
-                return
-
-            # Get URLs to delete
-            db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database.json')
-            urls_list = list(state['data'].keys())
-            deleted_items = []
-
-            for n in valid_numbers:
-                url = urls_list[n - 1]
+        # Process each number
+        deleted_items = []
+        state = delete_states[chat_id]
+        urls = list(state['data'].keys())
+        
+        for num in numbers:
+            if 1 <= num <= len(urls):
+                url = urls[num - 1]
                 title = state['data'][url]['metadata']['title']
-                deleted_items.append(f"*{title}*")
+                deleted_items.append(title)
                 state['data'].pop(url)
+                logger.info(f"[DELETE] Successfully deleted item {num}: {title}")
+            else:
+                logger.warning(f"[DELETE] Number out of range: {num}")
 
-            # Save updated data
+        # Save changes
+        if deleted_items:
+            db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database.json')
             with open(db_path, 'w') as f:
                 json.dump(state['data'], f, indent=4)
-
-            # Send confirmation
-            response = f"✅ Deleted {len(deleted_items)} links:\n" + "\n".join(f"{i}. {title}" for i, title in enumerate(deleted_items, 1))
-            bot.reply_to(message, response, parse_mode="Markdown")
             
-            logger.info(f"Successfully deleted items: {valid_numbers}")
-            delete_states.pop(chat_id)
+            # Format response
+            response = "✅ Deleted:\n" + "\n".join(f"{i}. *{title}*" for i, title in enumerate(deleted_items, 1))
+            logger.info(f"[DELETE] Sending success response with {len(deleted_items)} items")
+            bot.reply_to(message, response, parse_mode="Markdown")
+        else:
+            logger.warning("[DELETE] No valid items to delete")
+            bot.reply_to(message, "❌ No valid items to delete")
 
-        except Exception as e:
-            logger.error(f"Error processing numbers: {e}")
-            bot.reply_to(message, "❌ Error processing numbers. Please use format: 1,2,3 or 1 2 3")
+        delete_states.pop(chat_id)
 
     except Exception as e:
-        logger.error(f"Error in delete selection: {e}")
+        logger.error(f"[DELETE] Error in delete selection: {str(e)}", exc_info=True)
         bot.reply_to(message, "⚠️ An error occurred while deleting.")
 
 def cleanup_delete_states() -> None:

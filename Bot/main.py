@@ -94,17 +94,21 @@ def handle_link(message: Message) -> None:
 def list_command(message):
     handle_list_command(bot, message)
 
-@bot.message_handler(commands=['delete'])
+# Update the delete command handler to include 'del' alias
+@bot.message_handler(commands=['delete', 'del'])
 def delete_command(message):
     handle_delete_command(bot, message)
 
+# Update the delete selection handler to better handle spaces
 @bot.message_handler(func=lambda message: message.text and 
-                    (message.text.isdigit() or message.text.lower() in ['all', 'yes']))
+                    (message.text.isdigit() or ',' in message.text or 
+                     ' ' in message.text.strip() or message.text.lower() in ['all', 'yes']))
 def delete_selection(message):
-    # Check if it's a delete operation
+    logger.info(f"[MAIN] Received message: '{message.text}'")
     if message.chat.id in delete_states:
         handle_delete_selection(bot, message)
     else:
+        logger.info("[MAIN] Not in delete state, passing to number selection")
         handle_number_selection(message)
 
 @bot.message_handler(func=lambda message: message.text and message.text.isdigit())
@@ -118,9 +122,10 @@ def help_command(message: Message) -> None:
         "*📚 MetaMind Bot Commands:*\n\n"
         "• Send any URL to extract metadata\n"
         "• /list - Show all stored links\n"
-        "• /delete - Delete specific or all links\n"
+        "• /del (or /delete) - Delete specific or all links\n"
         "• /help - Show this message\n\n"
-        "_Reply with numbers when prompted to select items._"
+        "_Reply with numbers when prompted to select items._\n"
+        "_You can use comma or space to delete multiple links (e.g., `1,2,3` or `1 2 3`)_"
     )
     bot.send_message(message.chat.id, help_text, parse_mode="Markdown")
 
