@@ -14,6 +14,8 @@ from telebot.storage import StateMemoryStorage
 from telebot import asyncio_filters
 from collections import defaultdict
 from utils.log_cleanup import cleanup_logs  # Add to imports section at top
+from utils.messages import SUCCESS_MESSAGES, ERROR_MESSAGES
+from utils.metadata import extract_metadata, store_metadata
 
 # Add the project root to Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -29,6 +31,29 @@ from handlers.delete_handler import (
     delete_states,
     cleanup_delete_states  # Add this import
 )
+
+# Add this function after imports
+def extract_url(text: str) -> str:
+    """Extract URL from message text."""
+    # Pattern to match URLs
+    url_pattern = r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+'
+    urls = re.findall(url_pattern, text)
+    return urls[0] if urls else None
+
+def ensure_project_structure():
+    """Ensure required directories exist."""
+    dirs = [
+        'Bot/logs',
+        'Bot/data',
+        'Bot/utils',
+        'Bot/handlers'
+    ]
+    
+    for dir_path in dirs:
+        full_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), dir_path)
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+            logger.info(f"Created directory: {dir_path}")
 
 # Load environment variables
 load_dotenv()
@@ -52,6 +77,9 @@ def rate_limit_check(message: Message) -> bool:
     last_message_time[user_id] = current_time
     return True
 
+# Ensure project structure before bot initialization
+ensure_project_structure()
+
 # Initialize bot with state storage
 state_storage = StateMemoryStorage()
 bot = telebot.TeleBot(TOKEN, state_storage=state_storage)
@@ -74,27 +102,34 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Handle link messages
-@bot.message_handler(func=lambda message: message.text and message.text.startswith("http"))
+@bot.message_handler(func=lambda message: message.text and ('http://' in message.text.lower() or 'https://' in message.text.lower()))
 def handle_link(message: Message) -> None:
-    logger.info(f"Received link: {message.text}")  # Debug log
-    bot.send_message(message.chat.id, "🔍 Extracting metadata...")
-
+    """Handle messages containing URLs."""
     try:
-        metadata = extract_metadata(message.text)
+        url = extract_url(message.text)
+        if not url:
+            bot.reply_to(message, ERROR_MESSAGES['invalid_url'])
+            return
+
+        logger.info(f"Extracted URL: {url}")
+        metadata = extract_metadata(url)
 
         if "error" in metadata:
-            bot.send_message(message.chat.id, f"❌ Error: {metadata['error']}")
-        else:
-            response = (
-                f"*Title:* {metadata['title']}\n"
-                f"*Description:* {metadata['description']}"
-            )
-            bot.send_message(message.chat.id, response, parse_mode="Markdown")
+            bot.reply_to(message, ERROR_MESSAGES['metadata_error'])
+            return
+
+        # Store the metadata
+        store_metadata(url, metadata)
+        
+        # Format success message
+        response = SUCCESS_MESSAGES['link_added'].format(
+            title=metadata.get('title', 'No title')
+        )
+        bot.reply_to(message, response, parse_mode="Markdown")
 
     except Exception as e:
         logger.error(f"Error processing link: {e}")
-        bot.send_message(message.chat.id, "⚠️ Something went wrong! Please try again.")
+        bot.reply_to(message, ERROR_MESSAGES['general_error'])
 
 # Add this after your other handlers
 @bot.message_handler(commands=['list'])

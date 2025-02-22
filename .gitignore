@@ -1,6 +1,10 @@
 # Virtual environment (Ignore venv folder)
 venv/
 .venv/
+env/
+ENV/
+env.bak/
+venv.bak/
 
 # Environment variables (Contains sensitive data like API keys)
 .env
@@ -9,14 +13,57 @@ venv/
 __pycache__/
 *.pyc
 *.pyo
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
 # IDE/editor-specific files
 .vscode/
 .idea/
+*.swp
+*.swo
+*.swn
+*.bak
 
 # Logs & temporary files
 *.log
 *.tmp
+**/logs/
+**/*.log
+**/*.log.*
+**/debug.log
+**/error.log
+**/info.log
+**/warning.log
+
+# Bot specific logs
+Bot/logs/
+Bot/logs/*
+Bot/*.log
+Bot/*.log.*
+
+# System logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+.DS_Store
 
 # Google API credentials (Very Important!)
 credentials.json

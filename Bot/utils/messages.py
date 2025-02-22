@@ -9,5 +9,6 @@ ERROR_MESSAGES = {
     'invalid_url': "⚠️ Invalid URL. Please check and try again.",
     'no_links': "📭 No links saved yet.",
     'invalid_number': "❌ Invalid number(s). Please choose from the list.",
-    'general_error': "⚠️ Something went wrong! Please try again."
+    'general_error': "⚠️ Something went wrong! Please try again.",
+    'metadata_error': "⚠️ Couldn't extract metadata from this URL. Please try another link."
 }
