@@ -4,6 +4,7 @@ import sys
 import os
 import time  # Added import
 import re  # Add this import at the top
+import logging.handlers  # Add after imports
 from dotenv import load_dotenv
 from typing import Optional, Dict, Any
 from telebot.types import Message
@@ -51,7 +52,18 @@ bot = telebot.TeleBot(TOKEN, state_storage=state_storage)
 # Enable logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        # Console handler
+        logging.StreamHandler(),
+        # File handler
+        logging.handlers.RotatingFileHandler(
+            'Bot/logs/bot.log',
+            maxBytes=1024 * 1024,  # 1MB
+            backupCount=5,
+            encoding='utf-8'
+        )
+    ]
 )
 logger = logging.getLogger(__name__)
 
