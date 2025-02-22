@@ -52,11 +52,18 @@ wheels/
 **/info.log
 **/warning.log
 
-# Bot specific logs
+# All logs (catch-all patterns)
+logs/
+*.log
+*.log.*
+log/
+logging/
+
+# Bot specific logs (explicit patterns)
 Bot/logs/
-Bot/logs/*
-Bot/*.log
-Bot/*.log.*
+Bot/logs/**/*
+Bot/**/*.log
+Bot/**/*.log.*
 
 # System logs
 npm-debug.log*
