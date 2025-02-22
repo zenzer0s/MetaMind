@@ -3,6 +3,7 @@ import telebot
 import sys
 import os
 import time  # Added import
+import re  # Add this import at the top
 from dotenv import load_dotenv
 from typing import Optional, Dict, Any
 from telebot.types import Message
