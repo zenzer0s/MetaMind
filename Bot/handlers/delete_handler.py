@@ -55,7 +55,7 @@ def handle_delete_command(bot, message):
 def handle_delete_selection(bot, message):
     try:
         chat_id = message.chat.id
-        user_input = message.text.strip()
+        user_input = message.text.strip().lower()
         logger.info(f"[DELETE] New input received: '{user_input}' from chat_id: {chat_id}")
 
         if chat_id not in delete_states:
@@ -63,9 +63,38 @@ def handle_delete_selection(bot, message):
             bot.reply_to(message, "❌ Please use /del or /delete command first.")
             return
 
-        # Handle numbers with both commas and spaces
+        state = delete_states[chat_id]
+
+        # Handle confirmation for multiple deletions
+        if state.get('awaiting_confirmation'):
+            if user_input == 'yes':
+                numbers = state.get('pending_numbers', [])
+                urls = list(state['data'].keys())
+                deleted_items = []
+
+                for num in numbers:
+                    if 1 <= num <= len(urls):
+                        url = urls[num - 1]
+                        title = state['data'][url]['metadata']['title']
+                        deleted_items.append(title)
+                        state['data'].pop(url)
+                        logger.info(f"[DELETE] Successfully deleted item {num}: {title}")
+
+                # Save changes
+                db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database.json')
+                with open(db_path, 'w') as f:
+                    json.dump(state['data'], f, indent=4)
+
+                response = "✅ Deleted:\n" + "\n".join(f"{i}. *{title}*" for i, title in enumerate(deleted_items, 1))
+                bot.reply_to(message, response, parse_mode="Markdown")
+            else:
+                bot.reply_to(message, "❌ Deletion cancelled.")
+            
+            delete_states.pop(chat_id)
+            return
+
+        # Handle new number input
         numbers = []
-        # Split by both comma and space
         parts = [part.strip() for part in re.split(r'[,\s]+', user_input) if part.strip()]
         
         for part in parts:
@@ -77,48 +106,41 @@ def handle_delete_selection(bot, message):
                 logger.warning(f"[DELETE] Invalid number: {part}")
                 continue
 
-        # Add confirmation for multiple deletions
+        if not numbers:
+            logger.warning("[DELETE] No valid numbers found")
+            bot.reply_to(message, "❌ Please enter valid numbers.")
+            return
+
+        # Validate numbers
+        if any(num < 1 or num > len(state['data']) for num in numbers):
+            logger.warning("[DELETE] Numbers out of range")
+            bot.reply_to(message, "❌ Invalid number(s). Please choose from the list.")
+            return
+
+        # Request confirmation for multiple deletions
         if len(numbers) > 1:
             state['pending_numbers'] = numbers
             state['awaiting_confirmation'] = True
             titles = [state['data'][list(state['data'].keys())[n-1]]['metadata']['title'] for n in numbers]
-            confirm_text = "*❓ Confirm deletion of:*\n\n"
+            confirm_text = "*❓ Confirm deletion of these items:*\n\n"
             for i, title in enumerate(titles, 1):
                 confirm_text += f"{i}. *{title}*\n"
-            confirm_text += "\n_Reply 'yes' to confirm_"
+            confirm_text += "\n_Reply 'yes' to confirm or anything else to cancel_"
             
             bot.reply_to(message, confirm_text, parse_mode="Markdown")
             return
 
-        # Process each number
-        deleted_items = []
-        state = delete_states[chat_id]
-        urls = list(state['data'].keys())
-        
-        for num in numbers:
-            if 1 <= num <= len(urls):
-                url = urls[num - 1]
-                title = state['data'][url]['metadata']['title']
-                deleted_items.append(title)
-                state['data'].pop(url)
-                logger.info(f"[DELETE] Successfully deleted item {num}: {title}")
-            else:
-                logger.warning(f"[DELETE] Number out of range: {num}")
+        # Handle single deletion
+        url = list(state['data'].keys())[numbers[0] - 1]
+        title = state['data'][url]['metadata']['title']
+        state['data'].pop(url)
 
         # Save changes
-        if deleted_items:
-            db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database.json')
-            with open(db_path, 'w') as f:
-                json.dump(state['data'], f, indent=4)
-            
-            # Format response
-            response = "✅ Deleted:\n" + "\n".join(f"{i}. *{title}*" for i, title in enumerate(deleted_items, 1))
-            logger.info(f"[DELETE] Sending success response with {len(deleted_items)} items")
-            bot.reply_to(message, response, parse_mode="Markdown")
-        else:
-            logger.warning("[DELETE] No valid items to delete")
-            bot.reply_to(message, "❌ No valid items to delete")
+        db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database.json')
+        with open(db_path, 'w') as f:
+            json.dump(state['data'], f, indent=4)
 
+        bot.reply_to(message, f"✅ Deleted: *{title}*", parse_mode="Markdown")
         delete_states.pop(chat_id)
 
     except Exception as e:
