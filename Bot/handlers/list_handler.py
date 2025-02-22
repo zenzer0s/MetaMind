@@ -28,15 +28,7 @@ def handle_list_command(bot, message):
         global cached_data
         cached_data = data
 
-        response = "*📚 Stored Links:*\n\n"
-        for index, (url, info) in enumerate(data.items(), 1):
-            metadata = info['metadata']
-            title = metadata['title']
-            if len(title) > 50:
-                title = title[:47] + "..."
-            response += f"{index}. [{title}]({url})\n\n"
-
-        response += "\n_Reply with a number to see full details._"
+        response = format_list_message(data)
 
         if len(response) > 4000:
             response = response[:3900] + "\n\n_(Some links not shown due to length limit)_"
@@ -90,3 +82,26 @@ def handle_number_selection(message):
     except Exception as e:
         logger.error(f"Error handling number selection: {e}")
         bot.reply_to(message, "⚠️ An error occurred while retrieving the details.")
+
+def format_list_message(data: dict) -> str:
+    """Format stored links with better visual hierarchy."""
+    response = "*📚 Stored Links*\n\n"
+    
+    if not data:
+        return response + "_No links saved yet. Send me a URL to get started!_"
+    
+    for index, (url, info) in enumerate(data.items(), 1):
+        metadata = info['metadata']
+        title = metadata.get('title', 'No title')
+        desc = metadata.get('description', 'No description')
+        
+        # Truncate long texts
+        title = f"{title[:50]}..." if len(title) > 50 else title
+        desc = f"{desc[:100]}..." if len(desc) > 100 else desc
+        
+        response += (
+            f"*{index}.* [{title}]({url})\n"
+            f"└ _{desc}_\n\n"
+        )
+    
+    return response
