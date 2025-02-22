@@ -13,6 +13,7 @@ from telebot.handler_backends import State, StatesGroup
 from telebot.storage import StateMemoryStorage
 from telebot import asyncio_filters
 from collections import defaultdict
+from utils.log_cleanup import cleanup_logs  # Add to imports section at top
 
 # Add the project root to Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -135,13 +136,25 @@ def help_command(message: Message) -> None:
     )
     bot.send_message(message.chat.id, help_text, parse_mode="Markdown")
 
-def state_cleanup_thread():
+def cleanup_thread():
+    """Thread to clean up logs and states every 5 minutes."""
     while True:
-        cleanup_delete_states()
-        time.sleep(300)  # Run every 5 minutes
+        try:
+            # Clean up delete states
+            cleanup_delete_states()
+            
+            # Clean up log file
+            log_file = 'Bot/logs/bot.log'
+            cleanup_logs(log_file)
+            
+            # Wait for 5 minutes
+            time.sleep(300)
+        except Exception as e:
+            logger.error(f"Error in cleanup thread: {e}")
+            time.sleep(300)
 
 # Start cleanup thread
-cleanup_thread = threading.Thread(target=state_cleanup_thread, daemon=True)
+cleanup_thread = threading.Thread(target=cleanup_thread, daemon=True)
 cleanup_thread.start()
 
 # Start polling
