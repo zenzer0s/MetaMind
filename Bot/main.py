@@ -3,6 +3,8 @@ import telebot
 import sys
 import os
 from dotenv import load_dotenv
+from typing import Optional, Dict, Any
+from telebot.types import Message
 
 # Add the project root to Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 # Handle link messages
 @bot.message_handler(func=lambda message: message.text and message.text.startswith("http"))
-def handle_link(message):
+def handle_link(message: Message) -> None:
     logger.info(f"Received link: {message.text}")  # Debug log
     bot.send_message(message.chat.id, "🔍 Extracting metadata...")
 
