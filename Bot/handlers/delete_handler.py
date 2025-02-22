@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+import time
 from typing import Dict, Any
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,8 @@ def handle_delete_command(bot, message):
         # Cache the data for number selection
         delete_states[message.chat.id] = {
             'data': data,
-            'awaiting_confirmation': False
+            'awaiting_confirmation': False,
+            'timestamp': time.time()
         }
 
         response = "*🗑️ Select a link to delete:*\n\n"
@@ -104,3 +106,16 @@ def handle_delete_selection(bot, message):
     except Exception as e:
         logger.error(f"Error handling delete selection: {e}")
         bot.reply_to(message, "⚠️ An error occurred while deleting.")
+
+def cleanup_delete_states() -> None:
+    """Remove old delete states after timeout."""
+    current_time = time.time()
+    timeout = 300  # 5 minutes
+    
+    to_remove = [
+        chat_id for chat_id, state in delete_states.items()
+        if current_time - state.get('timestamp', 0) > timeout
+    ]
+    
+    for chat_id in to_remove:
+        delete_states.pop(chat_id, None)
