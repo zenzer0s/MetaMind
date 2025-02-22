@@ -5,6 +5,7 @@ import os
 import time  # Added import
 import re  # Add this import at the top
 import logging.handlers  # Add after imports
+import threading  # Add this import
 from dotenv import load_dotenv
 from typing import Optional, Dict, Any
 from telebot.types import Message
@@ -128,6 +129,15 @@ def help_command(message: Message) -> None:
         "_You can use comma or space to delete multiple links (e.g., `1,2,3` or `1 2 3`)_"
     )
     bot.send_message(message.chat.id, help_text, parse_mode="Markdown")
+
+def state_cleanup_thread():
+    while True:
+        cleanup_delete_states()
+        time.sleep(300)  # Run every 5 minutes
+
+# Start cleanup thread
+cleanup_thread = threading.Thread(target=state_cleanup_thread, daemon=True)
+cleanup_thread.start()
 
 # Start polling
 if __name__ == "__main__":
