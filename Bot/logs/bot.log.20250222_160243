@@ -1,0 +1,11 @@
+Log file rotated at 2025-02-22T15:57:43.193105
+2025-02-22 15:57:43,193 - utils.log_cleanup - INFO - Log file rotated. Backup: Bot/logs/bot.log.20250222_155743
+2025-02-22 15:58:11,332 - __main__ - INFO - [MAIN] Received message: '1 w 2'
+2025-02-22 15:58:11,333 - handlers.delete_handler - INFO - [DELETE] New input received: '1 w 2' from chat_id: 2123961513
+2025-02-22 15:58:11,333 - handlers.delete_handler - INFO - [DELETE] Parsed number: 1
+2025-02-22 15:58:11,334 - handlers.delete_handler - WARNING - [DELETE] Invalid number: w
+2025-02-22 15:58:11,334 - handlers.delete_handler - INFO - [DELETE] Parsed number: 2
+2025-02-22 15:59:52,486 - __main__ - INFO - [MAIN] Received message: 'Yes'
+2025-02-22 15:59:52,487 - handlers.delete_handler - INFO - [DELETE] New input received: 'yes' from chat_id: 2123961513
+2025-02-22 15:59:52,488 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 1: YouTube
+2025-02-22 15:59:52,488 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 2: GitHub - zenzer0s/MetaMind
