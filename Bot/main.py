@@ -11,7 +11,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.metadata import extract_metadata
-from handlers.list_handler import handle_list_command, handle_number_selection  # Import after fixing sys.path
+from handlers.list_handler import handle_list_command, handle_number_selection
+from handlers.delete_handler import handle_delete_command, handle_delete_selection, delete_states  # Added delete_states
 
 # Load environment variables
 load_dotenv()
@@ -56,6 +57,19 @@ def handle_link(message):
 @bot.message_handler(commands=['list'])
 def list_command(message):
     handle_list_command(bot, message)
+
+@bot.message_handler(commands=['delete'])
+def delete_command(message):
+    handle_delete_command(bot, message)
+
+@bot.message_handler(func=lambda message: message.text and 
+                    (message.text.isdigit() or message.text.lower() in ['all', 'yes']))
+def delete_selection(message):
+    # Check if it's a delete operation
+    if message.chat.id in delete_states:
+        handle_delete_selection(bot, message)
+    else:
+        handle_number_selection(message)
 
 @bot.message_handler(func=lambda message: message.text and message.text.isdigit())
 def number_selection(message):
