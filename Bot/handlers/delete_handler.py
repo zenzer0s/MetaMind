@@ -56,7 +56,7 @@ def handle_delete_selection(bot, message):
     """Handle delete selection including multiple numbers."""
     try:
         chat_id = message.chat.id
-        logger.debug(f"Processing delete selection. Input: {message.text}")
+        logger.info(f"Processing delete selection. Input: {message.text}")
         
         if chat_id not in delete_states:
             logger.warning(f"Chat {chat_id} tried to delete without /delete command")
@@ -85,50 +85,65 @@ def handle_delete_selection(bot, message):
 
         # Handle multiple number deletion
         try:
-            # Parse numbers from input (e.g., "1,3,4" or "1 3 4")
-            numbers = [int(n.strip()) for n in re.split(r'[,\s]+', message.text)]
+            # Clean and split input
+            clean_input = message.text.replace(' ', ',')
+            numbers = []
+            
+            for num in clean_input.split(','):
+                try:
+                    n = int(num.strip())
+                    numbers.append(n)
+                except ValueError:
+                    logger.warning(f"Invalid number in input: {num}")
+                    continue
+            
             logger.info(f"Parsed numbers: {numbers}")
             
             if not numbers:
-                logger.warning("No valid numbers found in input")
-                bot.reply_to(message, "❌ Please enter valid numbers.")
+                logger.warning("No valid numbers found")
+                bot.reply_to(message, "❌ Please enter valid numbers (e.g., 1,2,3 or 1 2 3)")
                 return
 
             # Validate numbers
-            if any(n < 1 or n > len(state['data']) for n in numbers):
-                logger.warning(f"Invalid numbers detected: {numbers}")
-                bot.reply_to(message, "❌ Invalid number(s). Please choose from the list.")
+            valid_numbers = []
+            for n in numbers:
+                if 1 <= n <= len(state['data']):
+                    valid_numbers.append(n)
+                else:
+                    logger.warning(f"Number out of range: {n}")
+
+            if not valid_numbers:
+                bot.reply_to(message, "❌ No valid numbers provided. Please choose from the list.")
                 return
 
             # Get URLs to delete
-            urls_to_delete = [list(state['data'].keys())[n - 1] for n in numbers]
-            
-            # Delete entries
             db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'database.json')
-            deleted_titles = []
-            
-            for url in urls_to_delete:
+            urls_list = list(state['data'].keys())
+            deleted_items = []
+
+            for n in valid_numbers:
+                url = urls_list[n - 1]
                 title = state['data'][url]['metadata']['title']
-                deleted_titles.append(title)
+                deleted_items.append(f"*{title}*")
                 state['data'].pop(url)
 
             # Save updated data
             with open(db_path, 'w') as f:
                 json.dump(state['data'], f, indent=4)
 
-            # Format response
-            response = "✅ Deleted:\n"
-            for i, title in enumerate(deleted_titles, 1):
-                response += f"{i}. *{title}*\n"
-            
+            # Send confirmation
+            response = f"✅ Deleted {len(deleted_items)} links:\n" + "\n".join(f"{i}. {title}" for i, title in enumerate(deleted_items, 1))
             bot.reply_to(message, response, parse_mode="Markdown")
+            
+            logger.info(f"Successfully deleted items: {valid_numbers}")
             delete_states.pop(chat_id)
 
-        except ValueError:
-            bot.reply_to(message, "❌ Please enter valid numbers separated by commas or spaces.")
+        except Exception as e:
+            logger.error(f"Error processing numbers: {e}")
+            bot.reply_to(message, "❌ Error processing numbers. Please use format: 1,2,3 or 1 2 3")
 
     except Exception as e:
-        logger.error(f"Error handling delete selection: {e}")
+        logger.error(f"Error in delete selection: {e}")
         bot.reply_to(message, "⚠️ An error occurred while deleting.")
 
 def cleanup_delete_states() -> None:
