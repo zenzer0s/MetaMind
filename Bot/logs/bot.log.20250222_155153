@@ -1,0 +1,99 @@
+2025-02-22 15:09:38,671 - __main__ - INFO - MetaMind Bot is running...
+2025-02-22 15:11:36,522 - __main__ - INFO - Received link: https://github.com/zenzer0s/MetaMind
+2025-02-22 15:11:56,179 - __main__ - INFO - Received link: https://m.cricbuzz.com/
+2025-02-22 15:12:27,740 - __main__ - INFO - Received link: https://m.youtube.com/
+2025-02-22 15:12:50,397 - handlers.delete_handler - INFO - Parsed numbers: [1]
+2025-02-22 15:13:09,984 - __main__ - INFO - Received link: https://github.com/zenzer0s/MetaMind
+2025-02-22 15:17:10,158 - __main__ - INFO - MetaMind Bot is running...
+2025-02-22 15:20:49,346 - __main__ - INFO - MetaMind Bot is running...
+2025-02-22 15:21:34,701 - handlers.delete_handler - INFO - Started processing delete selection. Chat ID: 2123961513, Input: 1
+2025-02-22 15:21:34,732 - handlers.delete_handler - INFO - Current state: {'data': {'https://m.cricbuzz.com/': {'metadata': {'title': 'Live Cricket Score, Schedule, Latest News, Stats &amp; Videos | Cricbuzz.com', 'description': 'Get Live Cricket Scores, Scorecard, Schedules of International and Domestic cricket matches along with Latest News, Videos and ICC Cricket Rankings of Players on Cricbuzz.'}, 'timestamp': '2025-02-22T15:11:57.354187'}, 'https://m.youtube.com/': {'metadata': {'title': 'YouTube', 'description': 'Enjoy the videos and music that you love, upload original content and share it all with friends, family and the world on YouTube.'}, 'timestamp': '2025-02-22T15:12:28.913453'}, 'https://github.com/zenzer0s/MetaMind': {'metadata': {'title': 'GitHub - zenzer0s/MetaMind', 'description': 'Contribute to zenzer0s/MetaMind development by creating an account on GitHub.'}, 'timestamp': '2025-02-22T15:13:11.433037'}}, 'awaiting_confirmation': False}
+2025-02-22 15:21:34,733 - handlers.delete_handler - INFO - Processing numeric input
+2025-02-22 15:21:34,734 - handlers.delete_handler - INFO - Parsed number: 1
+2025-02-22 15:21:34,735 - handlers.delete_handler - INFO - Valid numbers: [1]
+2025-02-22 15:21:34,735 - handlers.delete_handler - INFO - Deleted item 1: Live Cricket Score, Schedule, Latest News, Stats &amp; Videos | Cricbuzz.com
+2025-02-22 15:21:35,726 - handlers.delete_handler - INFO - Delete operation completed successfully
+2025-02-22 15:25:12,900 - __main__ - INFO - MetaMind Bot is running...
+2025-02-22 15:25:21,533 - __main__ - INFO - Received link: https://m.cricbuzz.com/
+2025-02-22 15:25:55,161 - __main__ - INFO - [MAIN] Received message: '1,2'
+2025-02-22 15:25:55,163 - handlers.delete_handler - INFO - [DELETE] New input received: '1,2' from chat_id: 2123961513
+2025-02-22 15:25:55,164 - handlers.delete_handler - INFO - [DELETE] Processing multiple numbers: 1,2
+2025-02-22 15:25:55,165 - handlers.delete_handler - INFO - [DELETE] Successfully parsed number: 1
+2025-02-22 15:25:55,165 - handlers.delete_handler - INFO - [DELETE] Successfully parsed number: 2
+2025-02-22 15:25:55,166 - handlers.delete_handler - INFO - [DELETE] Total valid numbers found: 2
+2025-02-22 15:25:55,166 - handlers.delete_handler - INFO - [DELETE] Numbers to process: [1, 2]
+2025-02-22 15:25:55,167 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 1: YouTube
+2025-02-22 15:25:55,167 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 2: GitHub - zenzer0s/MetaMind
+2025-02-22 15:25:55,170 - handlers.delete_handler - INFO - [DELETE] Sending success response with 2 items
+2025-02-22 15:26:16,001 - __main__ - INFO - Received link: https://m.youtube.com/https://github.com/zenzer0s/MetaMind
+2025-02-22 15:26:26,415 - __main__ - INFO - Received link: https://github.com/zenzer0s/MetaMind
+2025-02-22 15:26:33,845 - __main__ - INFO - Received link: https://m.youtube.com/
+2025-02-22 15:27:16,246 - __main__ - INFO - [MAIN] Received message: '1,a,2'
+2025-02-22 15:27:16,248 - handlers.delete_handler - INFO - [DELETE] New input received: '1,a,2' from chat_id: 2123961513
+2025-02-22 15:27:16,249 - handlers.delete_handler - INFO - [DELETE] Processing multiple numbers: 1,a,2
+2025-02-22 15:27:16,250 - handlers.delete_handler - INFO - [DELETE] Successfully parsed number: 1
+2025-02-22 15:27:16,250 - handlers.delete_handler - WARNING - [DELETE] Invalid number found: 'a'
+2025-02-22 15:27:16,251 - handlers.delete_handler - INFO - [DELETE] Successfully parsed number: 2
+2025-02-22 15:27:16,252 - handlers.delete_handler - INFO - [DELETE] Total valid numbers found: 2
+2025-02-22 15:27:16,252 - handlers.delete_handler - INFO - [DELETE] Numbers to process: [1, 2]
+2025-02-22 15:27:16,252 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 1: Live Cricket Score, Schedule, Latest News, Stats &amp; Videos | Cricbuzz.com
+2025-02-22 15:27:16,253 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 2: GitHub - zenzer0s/MetaMind
+2025-02-22 15:27:16,255 - handlers.delete_handler - INFO - [DELETE] Sending success response with 2 items
+2025-02-22 15:30:58,979 - __main__ - INFO - MetaMind Bot is running...
+2025-02-22 15:31:03,440 - __main__ - INFO - Received link: https://github.com/zenzer0s/MetaMind
+2025-02-22 15:31:07,217 - __main__ - INFO - Received link: https://m.youtube.com/
+2025-02-22 15:31:22,345 - __main__ - INFO - [MAIN] Received message: '1 2'
+2025-02-22 15:31:22,346 - handlers.delete_handler - INFO - [DELETE] New input received: '1 2' from chat_id: 2123961513
+2025-02-22 15:31:22,348 - handlers.delete_handler - INFO - [DELETE] Parsed number: 1
+2025-02-22 15:31:22,348 - handlers.delete_handler - INFO - [DELETE] Parsed number: 2
+2025-02-22 15:31:22,349 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 1: YouTube
+2025-02-22 15:31:22,349 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 2: GitHub - zenzer0s/MetaMind
+2025-02-22 15:31:22,351 - handlers.delete_handler - INFO - [DELETE] Sending success response with 2 items
+2025-02-22 15:33:53,681 - __main__ - INFO - Received link: https://m.youtube.com/
+2025-02-22 15:33:57,547 - __main__ - INFO - Received link: https://m.cricbuzz.com/
+2025-02-22 15:34:00,840 - __main__ - INFO - Received link: https://github.com/zenzer0s/MetaMind
+2025-02-22 15:34:29,181 - __main__ - INFO - [MAIN] Received message: '1 a 2'
+2025-02-22 15:34:29,182 - handlers.delete_handler - INFO - [DELETE] New input received: '1 a 2' from chat_id: 2123961513
+2025-02-22 15:34:29,183 - handlers.delete_handler - INFO - [DELETE] Parsed number: 1
+2025-02-22 15:34:29,184 - handlers.delete_handler - WARNING - [DELETE] Invalid number: a
+2025-02-22 15:34:29,185 - handlers.delete_handler - INFO - [DELETE] Parsed number: 2
+2025-02-22 15:34:29,185 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 1: YouTube
+2025-02-22 15:34:29,186 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 2: Live Cricket Score, Schedule, Latest News, Stats &amp; Videos | Cricbuzz.com
+2025-02-22 15:34:29,188 - handlers.delete_handler - INFO - [DELETE] Sending success response with 2 items
+2025-02-22 15:34:41,795 - __main__ - INFO - [MAIN] Received message: '1'
+2025-02-22 15:34:41,797 - __main__ - INFO - [MAIN] Not in delete state, passing to number selection
+2025-02-22 15:34:48,718 - __main__ - INFO - Received link: https://m.youtube.com/
+2025-02-22 15:34:52,288 - __main__ - INFO - Received link: https://m.cricbuzz.com/
+2025-02-22 15:35:03,853 - __main__ - INFO - [MAIN] Received message: '1 2 3'
+2025-02-22 15:35:03,854 - __main__ - INFO - [MAIN] Not in delete state, passing to number selection
+2025-02-22 15:35:03,856 - handlers.list_handler - ERROR - Error handling number selection: invalid literal for int() with base 10: '1 2 3'
+2025-02-22 15:35:17,502 - __main__ - INFO - [MAIN] Received message: '1 2 3'
+2025-02-22 15:35:17,504 - handlers.delete_handler - INFO - [DELETE] New input received: '1 2 3' from chat_id: 2123961513
+2025-02-22 15:35:17,505 - handlers.delete_handler - INFO - [DELETE] Parsed number: 1
+2025-02-22 15:35:17,505 - handlers.delete_handler - INFO - [DELETE] Parsed number: 2
+2025-02-22 15:35:17,506 - handlers.delete_handler - INFO - [DELETE] Parsed number: 3
+2025-02-22 15:35:17,506 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 1: GitHub - zenzer0s/MetaMind
+2025-02-22 15:35:17,507 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 2: YouTube
+2025-02-22 15:35:17,507 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 3: Live Cricket Score, Schedule, Latest News, Stats &amp; Videos | Cricbuzz.com
+2025-02-22 15:35:17,510 - handlers.delete_handler - INFO - [DELETE] Sending success response with 3 items
+2025-02-22 15:38:03,752 - __main__ - INFO - MetaMind Bot is running...
+2025-02-22 15:38:10,032 - __main__ - INFO - Received link: https://m.youtube.com/
+2025-02-22 15:38:13,899 - __main__ - INFO - Received link: https://m.cricbuzz.com/
+2025-02-22 15:38:16,493 - __main__ - INFO - Received link: https://github.com/zenzer0s/MetaMind
+2025-02-22 15:38:28,831 - __main__ - INFO - [MAIN] Received message: '1 2 3'
+2025-02-22 15:38:28,833 - handlers.delete_handler - INFO - [DELETE] New input received: '1 2 3' from chat_id: 2123961513
+2025-02-22 15:38:28,834 - handlers.delete_handler - INFO - [DELETE] Parsed number: 1
+2025-02-22 15:38:28,834 - handlers.delete_handler - INFO - [DELETE] Parsed number: 2
+2025-02-22 15:38:28,835 - handlers.delete_handler - INFO - [DELETE] Parsed number: 3
+2025-02-22 15:38:33,943 - __main__ - INFO - [MAIN] Received message: 'Yes'
+2025-02-22 15:38:33,945 - handlers.delete_handler - INFO - [DELETE] New input received: 'yes' from chat_id: 2123961513
+2025-02-22 15:38:33,946 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 1: YouTube
+2025-02-22 15:38:33,947 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 2: Live Cricket Score, Schedule, Latest News, Stats &amp; Videos | Cricbuzz.com
+2025-02-22 15:38:33,947 - handlers.delete_handler - INFO - [DELETE] Successfully deleted item 3: GitHub - zenzer0s/MetaMind
+2025-02-22 15:38:41,537 - __main__ - INFO - Received link: https://github.com/zenzer0s/MetaMind
+2025-02-22 15:38:51,113 - __main__ - INFO - [MAIN] Received message: '1'
+2025-02-22 15:38:51,114 - handlers.delete_handler - INFO - [DELETE] New input received: '1' from chat_id: 2123961513
+2025-02-22 15:38:51,116 - handlers.delete_handler - INFO - [DELETE] Parsed number: 1
+2025-02-22 15:50:41,225 - __main__ - INFO - MetaMind Bot is running...
+2025-02-22 15:50:41,228 - utils.log_cleanup - ERROR - Log cleanup error: [WinError 32] The process cannot access the file because it is being used by another process: 'Bot/logs/bot.log' -> 'Bot/logs/bot.log.20250222_155041'
+2025-02-22 15:51:53,024 - __main__ - INFO - MetaMind Bot is running...
