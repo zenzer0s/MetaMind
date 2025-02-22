@@ -1,0 +1,25 @@
+# Virtual environment (Ignore venv folder)
+venv/
+.venv/
+
+# Environment variables (Contains sensitive data like API keys)
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE/editor-specific files
+.vscode/
+.idea/
+
+# Logs & temporary files
+*.log
+*.tmp
+
+# Google API credentials (Very Important!)
+credentials.json
+
+# Ignore database if using local storage
+database.json
